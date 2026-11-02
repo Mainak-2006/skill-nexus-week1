@@ -1,0 +1,84 @@
+
+==============================================================================
+1. RAW DATA
+==============================================================================
+Shape: (891, 12)
+
+   PassengerId  Survived  Pclass                                                 Name     Sex   Age  SibSp  Parch            Ticket     Fare Cabin Embarked
+0            1         0       3                              Braund, Mr. Owen Harris    male  22.0      1      0         A/5 21171   7.2500   NaN        S
+1            2         1       1  Cumings, Mrs. John Bradley (Florence Briggs Thayer)  female  38.0      1      0          PC 17599  71.2833   C85        C
+2            3         1       3                               Heikkinen, Miss. Laina  female  26.0      0      0  STON/O2. 3101282   7.9250   NaN        S
+3            4         1       1         Futrelle, Mrs. Jacques Heath (Lily May Peel)  female  35.0      1      0            113803  53.1000  C123        S
+4            5         0       3                             Allen, Mr. William Henry    male  35.0      0      0            373450   8.0500   NaN        S
+
+==============================================================================
+1. MISSING VALUE AUDIT
+==============================================================================
+          missing  percent
+Cabin         687    77.10
+Age           177    19.87
+Embarked        2     0.22
+
+Duplicate rows: 0
+
+==============================================================================
+2. CLEANING DECISIONS
+==============================================================================
+Duplicates removed      : 0
+Age imputed with median : 28.0
+Fare imputed with median: 14.45
+Embarked imputed (mode) : S
+Dropped column          : Cabin (~77% missing)
+Added columns           : FamilySize, IsAlone
+
+Missing values left     : 0
+
+==============================================================================
+2. MISSING VALUES AFTER CLEANING
+==============================================================================
+PassengerId    0
+Survived       0
+Pclass         0
+Name           0
+Sex            0
+Age            0
+SibSp          0
+Parch          0
+Ticket         0
+Fare           0
+Embarked       0
+FamilySize     0
+IsAlone        0
+
+==============================================================================
+3. ENCODING
+==============================================================================
+LabelEncoder Sex      -> {'female': np.int64(0), 'male': np.int64(1)}
+LabelEncoder Embarked -> {'C': np.int64(0), 'Q': np.int64(1), 'S': np.int64(2)}
+OneHotEncoder         -> ['Embarked_Q', 'Embarked_S'] (drop='first' avoids collinearity)
+
+ Sex Embarked  Embarked_Label  Embarked_Q  Embarked_S
+   1        S               2         0.0         1.0
+   0        C               0         0.0         0.0
+   0        S               2         0.0         1.0
+   1        Q               1         1.0         0.0
+   0        Q               1         1.0         0.0
+   1        C               0         0.0         0.0
+
+==============================================================================
+3. FINAL COLUMNS
+==============================================================================
+Shape: (891, 16)
+PassengerId, Survived, Pclass, Name, Sex, Age, SibSp, Parch, Ticket, Fare, Embarked, FamilySize, IsAlone, Embarked_Label, Embarked_Q, Embarked_S
+
+==============================================================================
+4. VISUALISATION SAVED
+==============================================================================
+/home/mikey2006/CODING/AIML/SKILL_NEXUS_INTERNSHIP/WEEK1/Titanic Survival Prediction – Data Cleaning Project/outputs/age_distribution.png
+
+==============================================================================
+5. CLEANED DATASET SAVED
+==============================================================================
+/home/mikey2006/CODING/AIML/SKILL_NEXUS_INTERNSHIP/WEEK1/Titanic Survival Prediction – Data Cleaning Project/cleaned_titanic.csv
+Shape: 891 rows x 16 columns
+Missing values: 0

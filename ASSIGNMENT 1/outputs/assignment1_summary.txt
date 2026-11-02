@@ -1,0 +1,140 @@
+
+==============================================================================
+TASK 1 | DATASET LOADED
+==============================================================================
+File   : titanic.csv
+Shape  : 891 rows x 12 columns
+
+==============================================================================
+TASK 1 | FIRST 5 ROWS
+==============================================================================
+   PassengerId  Survived  Pclass                                                 Name     Sex   Age  SibSp  Parch            Ticket     Fare Cabin Embarked
+0            1         0       3                              Braund, Mr. Owen Harris    male  22.0      1      0         A/5 21171   7.2500   NaN        S
+1            2         1       1  Cumings, Mrs. John Bradley (Florence Briggs Thayer)  female  38.0      1      0          PC 17599  71.2833   C85        C
+2            3         1       3                               Heikkinen, Miss. Laina  female  26.0      0      0  STON/O2. 3101282   7.9250   NaN        S
+3            4         1       1         Futrelle, Mrs. Jacques Heath (Lily May Peel)  female  35.0      1      0            113803  53.1000  C123        S
+4            5         0       3                             Allen, Mr. William Henry    male  35.0      0      0            373450   8.0500   NaN        S
+
+==============================================================================
+TASK 1 | df.info()
+==============================================================================
+<class 'pandas.DataFrame'>
+RangeIndex: 891 entries, 0 to 890
+Data columns (total 12 columns):
+ #   Column       Non-Null Count  Dtype  
+---  ------       --------------  -----  
+ 0   PassengerId  891 non-null    int64  
+ 1   Survived     891 non-null    int64  
+ 2   Pclass       891 non-null    int64  
+ 3   Name         891 non-null    str    
+ 4   Sex          891 non-null    str    
+ 5   Age          714 non-null    float64
+ 6   SibSp        891 non-null    int64  
+ 7   Parch        891 non-null    int64  
+ 8   Ticket       891 non-null    str    
+ 9   Fare         891 non-null    float64
+ 10  Cabin        204 non-null    str    
+ 11  Embarked     889 non-null    str    
+dtypes: float64(2), int64(5), str(5)
+memory usage: 83.7 KB
+
+
+==============================================================================
+TASK 1 | df.describe() - numeric columns
+==============================================================================
+       PassengerId  Survived   Pclass      Age    SibSp    Parch     Fare
+count      891.000   891.000  891.000  714.000  891.000  891.000  891.000
+mean       446.000     0.384    2.309   29.699    0.523    0.382   32.204
+std        257.354     0.487    0.836   14.526    1.103    0.806   49.693
+min          1.000     0.000    1.000    0.420    0.000    0.000    0.000
+25%        223.500     0.000    2.000   20.125    0.000    0.000    7.910
+50%        446.000     0.000    3.000   28.000    0.000    0.000   14.454
+75%        668.500     1.000    3.000   38.000    1.000    0.000   31.000
+max        891.000     1.000    3.000   80.000    8.000    6.000  512.329
+
+==============================================================================
+TASK 1 | df.describe() - categorical columns
+==============================================================================
+                           Name   Sex  Ticket Cabin Embarked
+count                       891   891     891   204      889
+unique                      891     2     681   147        3
+top     Braund, Mr. Owen Harris  male  347082    G6        S
+freq                          1   577       7     4      644
+
+==============================================================================
+TASK 1 | MISSING VALUES PER COLUMN
+==============================================================================
+          missing  percent
+Cabin         687    77.10
+Age           177    19.87
+Embarked        2     0.22
+
+==============================================================================
+TASK 2 | NUMERIC COLUMNS WITH MISSING VALUES
+==============================================================================
+Age
+
+==============================================================================
+TASK 2 | IMPUTATION VALUES
+==============================================================================
+Age   mean = 29.70 | median = 28.00 (mean > median -> right skew, outliers pull the mean up)
+Fare  median = 14.45 (no missing values in this file)
+
+==============================================================================
+TASK 2 | EFFECT OF IMPUTATION ON AGE
+==============================================================================
+                                  0
+Age mean - original          29.699
+Age mean - mean-imputed      29.699
+Age mean - median-imputed    29.362
+Age median - original        28.000
+Age median - median-imputed  28.000
+
+==============================================================================
+TASK 2 | REMAINING MISSING AFTER IMPUTATION
+==============================================================================
+none - dataset is complete
+
+==============================================================================
+TASK 3 | LabelEncoder ON Sex
+==============================================================================
+classes = ['female', 'male']
+   Sex  Sex_Label
+  male          1
+female          0
+
+==============================================================================
+TASK 3 | LabelEncoder ON Embarked
+==============================================================================
+classes = ['C', 'Q', 'S']
+Embarked  Embarked_Label
+       S               2
+       C               0
+       Q               1
+
+==============================================================================
+TASK 3 | OneHotEncoder ON Embarked + Pclass
+==============================================================================
+new columns = ['Embarked_C', 'Embarked_Q', 'Embarked_S', 'Pclass_1', 'Pclass_2', 'Pclass_3']
+
+   Embarked_C  Embarked_Q  Embarked_S  Pclass_1  Pclass_2  Pclass_3
+0         0.0         0.0         1.0       0.0       0.0       1.0
+1         1.0         0.0         0.0       1.0       0.0       0.0
+2         0.0         0.0         1.0       0.0       0.0       1.0
+3         0.0         0.0         1.0       1.0       0.0       0.0
+4         0.0         0.0         1.0       0.0       0.0       1.0
+
+==============================================================================
+TASK 3 | ENCODED DATASET SAVED
+==============================================================================
+/home/mikey2006/CODING/AIML/SKILL_NEXUS_INTERNSHIP/WEEK1/ASSIGNMENT 1/outputs/titanic_encoded.csv
+Shape: (891, 19)
+
+==============================================================================
+TASK 3 | LabelEncoder vs OneHotEncoder
+==============================================================================
+LabelEncoder -> one integer column, compact; implies an order, so use for
+                binary columns (Sex) or tree models.
+OneHotEncoder -> one 0/1 column per category, no false order; use for
+                nominal columns (Embarked, Pclass) with linear models.
+                drop='first' avoids the dummy-variable trap.
